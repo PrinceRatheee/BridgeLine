@@ -1,6 +1,34 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const Peer = () => {
+
+    const navigate = useNavigate();
+    const [user, setUser] = useState("");
+    const [email, setEmail] = useState("");
+   
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const emailData = localStorage.getItem('emailData');
+                if (!emailData) {
+                    navigate("/");
+                } else {
+                    setEmail(emailData);
+                    const response = await axios.post("http://localhost:8000/api/userData", { email: emailData });
+                    console.log("response",response);
+                    setUser(response.data.object); // Assuming response.data contains user data
+                }
+            } catch (error) {
+                console.log("Error in fetching user data on frontend:", error);
+            }
+        };
+
+        fetchData();
+    }, [navigate]);
+
+
     return (
         <div className='flex flex-col'>
             <div className='flex flex-col w-[70%] mx-auto my-[4rem]'>
@@ -26,13 +54,13 @@ const Peer = () => {
                     <h3 className='text-bold text-[4rem] underline-offset-4 '>Your Dashboard</h3>
                     <div className='h-[0.4rem] w-[10rem] bg-[#2874fc]' />
                 </div>
-                <h1 className='text-center text-[1.8rem]'>Hello, <span className='yantramanav-regular font-bold text-[2.5rem] text-[#2874fc]'>User.Name</span></h1>
-                <h1 className='text-center mb-[2rem]'><span className='teko text-[2rem] mr-[0.8rem] '>Your Amount :</span> <span className='text-[3rem]'>user.money</span></h1>
+                <h1 className='text-center text-[1.8rem]'>Hello, <span className='yantramanav-regular font-bold text-[2.5rem] text-[#2874fc]'>{user.name}</span></h1>
+                <h1 className='text-center mb-[2rem]'><span className='teko text-[2rem] mr-[0.8rem] '>Your Amount :</span> <span className='text-[3rem]'>{user.country==="india"?"₹ ":"$ "}{user.amount}</span></h1>
                 <div className='flex justify-around'>
-                    <div className='bg-[#2874fc] hover:bg-[#2876fcf1] w-[12rem] flex gap-[0.5rem] hover:gap-[0.8rem] justify-center cursor-pointer py-[1rem] text-[1.1rem] text-white font-bold'>Deposit
+                    <div className='bg-[#2874fc] hover:bg-[#2876fcf1] w-[12rem] flex gap-[0.5rem] hover:gap-[0.8rem] justify-center cursor-pointer py-[1rem] text-[1.1rem] text-white font-bold' onClick={()=>navigate("/transfermoney")}>Deposit
                         <img src="./depositwhite.png" alt="depositimage" className='w-[1.5rem] ' />
                     </div>
-                    <div className='bg-[#2874fc] hover:bg-[#2876fcf1] w-[12rem] flex gap-[0.5rem] hover:gap-[0.8rem] justify-center cursor-pointer py-[1rem] text-[1.1rem] text-white font-bold'>Withdraw
+                    <div className='bg-[#2874fc] hover:bg-[#2876fcf1] w-[12rem] flex gap-[0.5rem] hover:gap-[0.8rem] justify-center cursor-pointer py-[1rem] text-[1.1rem] text-white font-bold' onClick={()=>navigate("/widthdrawmoney")}>Withdraw
                         <img src="./upload.png" alt="depositimage" className='w-[1.5rem] ' />
 
                     </div>
@@ -42,6 +70,8 @@ const Peer = () => {
                     </div>
 
                 </div>
+
+                
                 <div className='w-[80%] h-[0.4rem] bg-[#2874fc] mt-[2rem] mx-auto'></div>
                 {/* Transaction History  */}
                 <div className='flex flex-col' >
@@ -84,7 +114,7 @@ const Peer = () => {
                         </div>
                         <div className='flex justify-center gap-[0.5rem] items-center hover:gap-[0.8rem]'>
                             <h1 className='text-[#2874fc]  cursor-pointer'>Reedem Now </h1>
-                            <img src="./rightblue.png" alt="proceedimage" className=' w-[1rem] cursor-pointer'/>
+                            <img src="./rightblue.png" alt="proceedimage" className=' w-[1rem] cursor-pointer' />
                         </div>
                     </div>
                 </div>

@@ -19,6 +19,7 @@ const SignUp = () => {
     phone:"",
     email: "",
     password: "",
+    country:""
   });
 
   const onSignup = async ()=>{ 
@@ -30,6 +31,8 @@ const SignUp = () => {
       const response = await axios.post("http://localhost:8000/api/register", user);
       console.log(response);
       // router.push("/signin");
+
+      navigate("/login");
     } catch (error) {
       console.log("Signup failed ", error.message);
       toast.error(error.message);
@@ -54,6 +57,17 @@ const SignUp = () => {
             id="fullname"
             
             onChange={(e) => setUser({...user,fullname:e.target.value})}
+          />
+        </div>
+        <div className="flex flex-col">
+          <h2 className="merriweather-font font-bold text-[1rem]">Your Country</h2>
+          <input
+            type="text"
+            className="border-2 border-zinc-300  px-[1rem] py-[0.6rem] "
+            value={user.country}
+            id="country"
+            
+            onChange={(e) => setUser({...user,country:e.target.value})}
           />
         </div>
         <div className="flex flex-col">
@@ -92,10 +106,10 @@ const SignUp = () => {
 
         <div>
           <p className="text-gray-500">
-            By creating an account, I agree to{" "}
+            By creating an account, You agree to{" "}
             <span className="text-orange-400">
               {" "}
-              STC&apos;s Terms & Services{" "}
+              BridgeLine&apos;s Terms & Services{" "}
             </span>{" "}
             and Privacy Policy.
           </p>

@@ -27,6 +27,8 @@ const Login = () => {
             toast.success(response.data.message);
             console.log("Signed in Succesfully");
             // router.push("/trading");
+            window.location.reload();
+            // navigate("/");
         } catch (error) {
             console.log("Signin failed", error.message);
             toast.error(error.message);

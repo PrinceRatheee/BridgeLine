@@ -43,8 +43,14 @@ const userSchema = mongoose.Schema(
         required:true,
         unique:true
     },
+    amount:{
+        type:"Number"
+    },
     coins:{
         type:"Number"
+    },
+    country:{
+        type:"String",
     },
     history:[HistorySchema]
 
