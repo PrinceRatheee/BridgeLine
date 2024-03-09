@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 const Nav = () => {
     const navigate = useNavigate();
-
+    useEffect(() => {
+        const isLoggedInUser=localStorage.getItem('emailData');
+ 
+      
+    }, [])
+    
     return (
         <div className='flex flex-col w-[80%] mx-auto pt-[2rem] '>
             <div className='flex justify-between items-center'>

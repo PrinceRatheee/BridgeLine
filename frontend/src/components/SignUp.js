@@ -1,10 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {toast} from "react-hot-toast";
+import { useNavigate } from "react-router-dom"
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      const isLoggedInUser=localStorage.getItem('emailData');
+      if(isLoggedInUser){
+          navigate('/');
+      }
+  
+    
+  }, [])
   const [user, setUser] = useState({
-    username: "",
+    fullname: "",
     phone:"",
     email: "",
     password: "",
@@ -16,7 +27,7 @@ const SignUp = () => {
     try {
       console.log(user);
       console.log("Frontend");
-      const response = await axios.post("/api/users/signup", user);
+      const response = await axios.post("http://localhost:8000/api/register", user);
       console.log(response);
       // router.push("/signin");
     } catch (error) {
@@ -39,10 +50,10 @@ const SignUp = () => {
           <input
             type="text"
             className="border-2 border-zinc-300  px-[1rem] py-[0.6rem] "
-            value={user.username}
-            id="username"
+            value={user.fullname}
+            id="fullname"
             
-            onChange={(e) => setUser({...user,username:e.target.value})}
+            onChange={(e) => setUser({...user,fullname:e.target.value})}
           />
         </div>
         <div className="flex flex-col">

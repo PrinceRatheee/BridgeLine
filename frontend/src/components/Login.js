@@ -1,17 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLoggedInUser=localStorage.getItem('emailData');
+        if(isLoggedInUser){
+            navigate('/');
+        }
+    
+      
+    }, [])
+    
     const onSignIn = async () => {
 
         console.log("jk");
         try {
             console.log(user);
 
-            const response = await axios.post("/api/users/signin", user);
-
-
+            const response = await axios.post("http://localhost:8000/api/login", user);
+            
+            localStorage.setItem('emailData',user.email);
             toast.success(response.data.message);
             console.log("Signed in Succesfully");
             // router.push("/trading");
