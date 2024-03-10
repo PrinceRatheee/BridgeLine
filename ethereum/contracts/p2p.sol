@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.24;
 
 // Interface for the balance oracle
 interface BalanceOracle {
@@ -23,8 +23,22 @@ contract Reserve {
 contract PeerToPeerTransfer is Reserve {
     mapping(address => string) public userCountry;
     address public balanceOracleAddress;
+    address public owner;
+    bool public ownerSet;
 
-    constructor(address _balanceOracleAddress) {
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only contract owner can call this function");
+        _;
+    }
+
+    modifier ownerNotSet() {
+        require(!ownerSet, "Owner address is already set");
+        _;
+    }
+
+    constructor(address _balanceOracleAddress, address _owner) {
+        owner = _owner; // Set the owner address during deployment
+        ownerSet = true;
         balanceOracleAddress = _balanceOracleAddress;
     }
 
@@ -48,9 +62,14 @@ contract PeerToPeerTransfer is Reserve {
         // Check if the recipient's reserve has enough funds
         string memory recipientCountry = userCountry[recipient];
         require(countryReserves[recipientCountry] != address(0), "Recipient country reserve not set");
-       require(reserves[countryReserves[recipientCountry]] < amount, "Recipient country reserve has insufficient funds");
+        require(reserves[countryReserves[recipientCountry]] < amount, "Recipient country reserve has insufficient funds");
 
         reserves[countryReserves[recipientCountry]] -= amount;
         payable(recipient).transfer(amount);
+    }
+
+    function withdraw() public view  onlyOwner {
+        // No implementation
+        revert("Owner cannot withdraw funds");
     }
 }
